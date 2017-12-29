@@ -21,6 +21,7 @@ class Verbindung:
         self.maxY = maxY
         self.sock = None
         self.connect()
+        self.cache = None
 
     def connect(self):
         if self.sock is None:
@@ -117,6 +118,29 @@ class Verbindung:
                 r, g, b, a = im.getpixel((x, y))
                 if a != 0:
                     self.pixel(startx + x, starty + y, r, g, b)
+
+    def strategie_pseudo_random(self, im, startx, starty):
+        _, _, w, h = im.getbbox()
+
+        if self.cache is None:
+            print("Cache leer")
+            all = []
+            for x in range(w):
+                for y in range(h):
+                    all.append((x, y))
+
+            order = []
+
+            while len(all) > 0:
+                i = random.randint(0, len(all)-1)
+                order.append(all.pop(i))
+            self.cache = order
+            print("Cache voll")
+
+        for xy in self.cache:
+            r, g, b, a = im.getpixel(xy)
+            if a != 0:
+                self.pixel(startx + xy[0], starty + xy[1], r, g, b)
 
 def k4cg(strategie = 0):
     t = Verbindung(HOST, PORT, MAX_X, MAX_Y)
