@@ -11,9 +11,6 @@ MAX_X = 800
 MAX_Y = 600
 
 class Verbindung:
-
-
-
     def __init__(self, host, port, maxX, maxY):
         self.host = host
         self.port = port
@@ -35,22 +32,12 @@ class Verbindung:
         else:
             self.sock.send(b'PX %d %d %02x%02x%02x%02x\n' % (x, y, r, g, b, a))
 
-
-#def rect(x, y, w, h, r, g, b):
-#    for i in range(x, x + w):
-#        for j in range(y, y + h):
-#            pixel(i, j, r, g, b)
-
-
-
-
     def plusminus(self):
         number = random.randint(0, 1)
         if number == 0:
             return -1
         else:
             return 1
-
 
     def worm(self, x, y, r, g, b):
         while n:
@@ -70,22 +57,14 @@ class Verbindung:
             if y > MAX_Y:
                 y = MAX_Y
 
-
-
     def pic(self, name, startx=0, starty=0, width = 200, strategie = "links_rechts"):
         im = Image.open(name).convert('RGBa')
         left, upper, right, lower = im.getbbox()
-
         height = right / width * lower
-
-
         im.thumbnail((width, height), Image.ANTIALIAS)
-        #im.convert('RGB')
 
         method = getattr(self, "strategie_" + strategie, lambda: "nothing")
-        # Call the method as we return it
-        return method(im, startx, starty)
-        #self.strategie_unten_oben(im, startx, starty)
+        method(im, startx, starty)
 
     def strategie_links_rechts(self, im, startx, starty):
         _, _, w, h = im.getbbox()
@@ -121,26 +100,19 @@ class Verbindung:
 
     def strategie_pseudo_random(self, im, startx, starty):
         _, _, w, h = im.getbbox()
-
         if self.cache is None:
             print("Cache leer")
-            all = []
+            self.cache = []
             for x in range(w):
                 for y in range(h):
-                    all.append((x, y))
-
-            order = []
-
-            while len(all) > 0:
-                i = random.randint(0, len(all)-1)
-                order.append(all.pop(i))
-            self.cache = order
+                    self.cache.append((x, y))
+            random.shuffle(self.cache)
             print("Cache voll")
 
-        for xy in self.cache:
-            r, g, b, a = im.getpixel(xy)
+        for x, y in self.cache:
+            r, g, b, a = im.getpixel((x,y))
             if a != 0:
-                self.pixel(startx + xy[0], starty + xy[1], r, g, b)
+                self.pixel(startx + x, starty + y, r, g, b)
 
 def k4cg(strategie = 0):
     t = Verbindung(HOST, PORT, MAX_X, MAX_Y)
@@ -156,8 +128,6 @@ k4cg(strategie)
 
 #except:
 #   print ("Error: unable to start thread")
-
-
 
 
 #worm(200, 200, 500000, 255, 192, 203)
