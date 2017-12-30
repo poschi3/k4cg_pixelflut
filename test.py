@@ -8,17 +8,18 @@ MAX_X = 800
 MAX_Y = 600
 
 def k4cg(strategie = 'links_rechts'):
-    print(strategie)
+    print("  " + strategie)
     v = Verbindung(HOST, PORT, MAX_X, MAX_Y)
     p = Picture(v)
     p.setPicture('Logo_leiter.png', 100, 60, 600, strategie)
     p.start()
 
-strategies = ['links_rechts', 'rechts_links', 'oben_unten', 'unten_oben', 'pseudo_random']
 
-anzahl = int(sys.argv[1])
-for x in range(anzahl):
-    for strategie in strategies:
-        k4cg(strategie)
+#strategies = ['links_rechts', 'rechts_links', 'oben_unten', 'unten_oben', 'pseudo_random']
+strategies = ['pseudo_random']
 
-print("Alle gestartet!")
+anzahl = 0
+while True:
+    k4cg('pseudo_random')
+    anzahl += 1
+    print("Anzahl: " + str(anzahl))
