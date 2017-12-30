@@ -1,5 +1,6 @@
 from verbindung import Verbindung
 from picture import Picture
+import sys
 
 HOST = '151.217.47.77'
 PORT = 8080
@@ -15,7 +16,9 @@ def k4cg(strategie = 'links_rechts'):
 
 strategies = ['links_rechts', 'rechts_links', 'oben_unten', 'unten_oben', 'pseudo_random']
 
-for strategie in strategies:
-    k4cg(strategie)
+anzahl = int(sys.argv[1])
+for x in range(anzahl):
+    for strategie in strategies:
+        k4cg(strategie)
 
 print("Alle gestartet!")
