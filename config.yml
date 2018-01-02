@@ -1,0 +1,14 @@
+server:
+  host: "127.0.0.1"
+  port: 8282
+image:
+  filepath: "Logo_leiter.png"
+  color_transparency:
+    enabled: true
+    color: "000000"
+draw:
+  strategy: "pseudo_random" #links_rechts', 'rechts_links', 'oben_unten', 'unten_oben', 'pseudo_random'
+  width: 600
+  position:
+    x: 100
+    y: 60
