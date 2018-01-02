@@ -1,17 +1,23 @@
+#!/usr/bin/env python
+
 from verbindung import Verbindung
 from picture import Picture
+from simpleconfig import SimpleConfig
+from size import Size
+
 import sys
 
-HOST = '151.217.47.77'
-PORT = 8080
-MAX_X = 800
-MAX_Y = 600
 
-def k4cg(strategie = 'links_rechts'):
-    print("  " + strategie)
-    v = Verbindung(HOST, PORT, MAX_X, MAX_Y)
+config = SimpleConfig().load("config.yml")
+size = Size().detect(config.getServerHost(), config.getServerPort())
+
+def k4cg(config, size):
+    print("  " + config.getStrategy())
+    v = Verbindung(config.getServerHost(), config.getServerPort(), size.width, size.height)
     p = Picture(v)
-    p.setPicture('Logo_leiter.png', 100, 60, 600, strategie)
+    p.setPicture(config.getImageFilePath(), config.getDrawPositionX(), config.getDrawPositionY(), config.getDrawWidth(), config.getStrategy())
+    if config.useColorBasedImageTransparency():
+        p.setColorBasedTransparency(config.getImageTransparencyColor())
     p.start()
 
 
@@ -20,6 +26,6 @@ strategies = ['pseudo_random']
 
 anzahl = 0
 while True:
-    k4cg('pseudo_random')
+    k4cg(config, size)
     anzahl += 1
     print("Anzahl: " + str(anzahl))
